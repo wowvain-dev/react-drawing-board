@@ -1,13 +1,13 @@
 {
   "name": "react-drawing-board",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "",
   "main": "lib/index.js",
   "authors": {
     "name": "",
     "email": ""
   },
-  "repository": "https://github.com/dilidili/react-drawing-board",
+  "repository": "https://github.com/wowvain-dev/react-drawing-board",
   "files": [
     "src",
     "lib"
