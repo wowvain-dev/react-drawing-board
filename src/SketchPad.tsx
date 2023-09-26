@@ -53,6 +53,7 @@ import EnableSketchPadContext from './contexts/EnableSketchPadContext';
 import './SketchPad.less';
 import ConfigContext from './ConfigContext';
 import { usePinch, useWheel } from 'react-use-gesture';
+import { standWithUkraine as imageCoordinates } from './images/canvas_working_background/stand_with_ukraine'
 
 export interface SketchPadProps {
   currentTool: Tool;
@@ -460,8 +461,8 @@ const useResizeHandler = (
     };
   } else
     return {
-      onMouseMove: () => {},
-      onMouseUp: () => {},
+      onMouseMove: () => { },
+      onMouseUp: () => { },
       resizer: null,
     };
 };
@@ -1038,7 +1039,7 @@ const SketchPad: React.ForwardRefRenderFunction<any, SketchPadProps> = (props, r
 
             setSelectedOperation({ ...selectedOperation, ...data });
           },
-          () => {},
+          () => { },
           prefixCls,
         );
         break;
@@ -1063,7 +1064,7 @@ const SketchPad: React.ForwardRefRenderFunction<any, SketchPadProps> = (props, r
 
             setSelectedOperation({ ...selectedOperation, ...data });
           },
-          () => {},
+          () => { },
           prefixCls,
         );
         break;
@@ -1103,7 +1104,7 @@ const SketchPad: React.ForwardRefRenderFunction<any, SketchPadProps> = (props, r
             // @ts-ignore
             setSelectedOperation({ ...selectedOperation, ...data });
           },
-          () => {},
+          () => { },
           intl,
           prefixCls,
         );
@@ -1163,6 +1164,39 @@ const SketchPad: React.ForwardRefRenderFunction<any, SketchPadProps> = (props, r
       </div>
     );
   }
+
+  useEffect(() => {
+    const context = refContext.current;
+
+    context.beginPath();
+    context.moveTo(imageCoordinates[0].x, imageCoordinates[0].y);
+
+
+    imageCoordinates.forEach(({ x, y, radiusX, radiusY }, index) => {
+      const startPoint = index - 1 < 0 ? imageCoordinates[0] : imageCoordinates[index - 1];
+      const endPoint = { x, y }
+
+      if (radiusX && radiusY) {
+        const curve = {
+          x: (startPoint.x + endPoint.x) * radiusX!,
+          y: startPoint.y + radiusY!,
+        };
+
+        context.quadraticCurveTo(curve.x, curve.y, endPoint.x, endPoint.y);
+      }
+
+      else {
+        context.lineTo(endPoint.x, endPoint.y);
+      }
+    })
+
+    context.fillStyle = 'white';
+    context.fill();
+    context.stroke();
+    context.clip();
+
+
+  }, [])
 
   return (
     <div
